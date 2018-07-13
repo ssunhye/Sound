@@ -45,7 +45,7 @@ function volumeAudioProcess( event ) {
 	}
 
     // ... then take the square root of the sum.
-	var rms =  Math.sqrt(sum / bufLength);
+	var rms =  Math.sqrt(sum / bufLength/2);
 	
 	var decibel = 20*(Math.log10(rms/0.000002));
 	
