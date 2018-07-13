@@ -54,6 +54,7 @@ function gotStream(stream) {
     // Create a new volume meter and connect it.
     meter = createAudioMeter(audioContext);
     mediaStreamSource.connect(meter);
+    data=meter.volume.toFixed(3);
 
     // kick off the visual updating
     
@@ -69,9 +70,9 @@ function gotStream(stream) {
     }]);
 
     setInterval(function(){
-        data=meter.volume;
+        data=meter.volume.toFixed(3);
 
-        document.getElementById("show").innerHTML = meter.volume;
+        document.getElementById("show").innerHTML = data;
         Plotly.extendTraces('chart',{y:[[data]]}, [0]);
         ++cnt;
     
