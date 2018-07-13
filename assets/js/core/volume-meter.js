@@ -52,18 +52,18 @@ function volumeAudioProcess( event ) {
 	}
 
     // ... then take the square root of the sum.
-	 var rms =  Math.sqrt(sum / bufLength);
-	//  var decibel = 20*(Math.log10(rms/0.000002));
-	var dbValue = 20*(Math.log10(rms/0.000002));
-	if (dbValue>lastDB){
-		value = dbValue-lastDB > min ? dbValue - lastDB : min;
-	}else{
-		value = dbValue-lastDB < -min ? dbValue - lastDB : -min;
-	}
-	decibel = lastDB+value*0.2;
-	lastDB=decibel;
-	if(decibel<minDB) minDB=decibel;
-	if(decibel>maxDB) maxDB=decibel;
+	var rms =  Math.sqrt(sum / bufLength);
+	var decibel = 20*(Math.log10(rms/0.000002));
+	// var dbValue = 20*(Math.log10(rms/0.000002));
+	// if (dbValue>lastDB){
+	// 	value = dbValue-lastDB > min ? dbValue - lastDB : min;
+	// }else{
+	// 	value = dbValue-lastDB < -min ? dbValue - lastDB : -min;
+	// }
+	// decibel = lastDB+value*0.2;
+	// lastDB=decibel;
+	// if(decibel<minDB) minDB=decibel;
+	// if(decibel>maxDB) maxDB=decibel;
 
 	this.volume = decibel;
 }
