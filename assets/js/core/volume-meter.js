@@ -49,9 +49,7 @@ function volumeAudioProcess( event ) {
 	
 	var decibel = 20*(Math.log10(rms/0.000002));
 	
-	if(decibel>0&&decibel<100000){
-		//this.volume = Math.max(rms, this.volume*this.averaging);
-		this.volume = decibel;
-	}
+	//this.volume = Math.max(rms, this.volume*this.averaging);
+	this.volume = decibel;
     
 }
