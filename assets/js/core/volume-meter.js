@@ -28,6 +28,13 @@ function createAudioMeter(audioContext,clipLevel,averaging,clipLag) {
 	return processor;
 }
 
+var decibel =40;
+var minDB = 100;
+var maxDB=0;
+var lastDB = decibel;
+var min = 0.5;
+var value = 0;
+
 function volumeAudioProcess( event ) {
 	var buf = event.inputBuffer.getChannelData(0);
     var bufLength = buf.length;
@@ -45,10 +52,18 @@ function volumeAudioProcess( event ) {
 	}
 
     // ... then take the square root of the sum.
-	var rms =  Math.sqrt(sum / bufLength);
-	
-	var decibel = 20*(Math.log10(rms/0.000002));
-	
-    //this.volume = Math.max(rms, this.volume*this.averaging);
+	 var rms =  Math.sqrt(sum / bufLength);
+	//  var decibel = 20*(Math.log10(rms/0.000002));
+	var dbValue = 20*(Math.log10(rms/0.000002));
+	if (dbValue>lastDB){
+		value = dbValue-lastDB > min ? dbValue - lastDB : min;
+	}else{
+		value = dbValue-lastDB < -min ? dbValue - lastDB : -min;
+	}
+	decibel = lastDB+value*0.2;
+	lastDB=decibel;
+	if(decibel<minDB) minDB=decibel;
+	if(decibel>maxDB) maxDB=decibel;
+
 	this.volume = decibel;
 }
