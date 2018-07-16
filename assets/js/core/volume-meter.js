@@ -28,8 +28,8 @@ function volumeAudioProcess( event ) {
 
 		var rms =  Math.sqrt(sum / bufLength/2);
 		if(rms!=0){
-			var decibel = 20*(Math.log10(rms/0.000003));		
-			this.volume = decibel;
+			var decibel = 20*(Math.log10(rms/0.000002));		
+			this.volume = rms;
 		}
 	}
 }
