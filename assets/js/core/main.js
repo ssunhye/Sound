@@ -1,26 +1,20 @@
 var audioContext = null;
 var meter = null;
-var canvasContext = null;
-var WIDTH=500;
-var HEIGHT=50;
-var rafID = null;
 
 window.onload = function() {
-    // monkeypatch Web Audio
-    window.AudioContext = window.AudioContext || window.webkitAudioContext;
-	
-    // grab an audio context
-    audioContext = new AudioContext();
+    try{
+        window.AudioContext = window.AudioContext || window.webkitAudioContext;
+	    audioContext = new AudioContext();
+    }catch(e){
+        this.alert('Web Audio API is not supported in this browser');
+    }
 
-    // Attempt to get audio input
     try {
-        // monkeypatch getUserMedia
         navigator.getUserMedia = 
         	navigator.getUserMedia ||
         	navigator.webkitGetUserMedia ||
         	navigator.mozGetUserMedia;
 
-        // ask for an audio input
         navigator.getUserMedia(
         {
             "audio": {
@@ -36,7 +30,6 @@ window.onload = function() {
     } catch (e) {
         alert('getUserMedia threw exception :' + e);
     }
-
 }
 
 function didntGetStream() {
@@ -46,17 +39,14 @@ function didntGetStream() {
 var mediaStreamSource = null;
 var data=0;
 var cnt = 0;
+var desc=null;
 
 function gotStream(stream) {
-    // Create an AudioNode from the stream.
     mediaStreamSource = audioContext.createMediaStreamSource(stream);
 
-    // Create a new volume meter and connect it.
     meter = createAudioMeter(audioContext);
     mediaStreamSource.connect(meter);
     data=meter.volume.toFixed(3);
-
-    // kick off the visual updating
     
     Plotly.plot('chart',[{
         y:[data],
@@ -72,10 +62,48 @@ function gotStream(stream) {
     setInterval(function(){
         data=meter.volume.toFixed(3);
 
+        if(data<10){
+            desc="숨쉬는 소리";
+        }
+        else if(data<20){
+            desc="나뭇잎 스치는 소리";
+        }
+        else if(data<30){
+            desc="속삭이는 소리";
+        }
+        else if(data<40){
+            desc="조용한 도서관";
+        }
+        else if(data<50){
+            desc="조용한 사무실";
+        }
+        else if(data<60){
+            desc="보통 대화소리";
+        }
+        else if(data<70){
+            desc="진공청소기 소리";
+        }
+        else if(data<80){
+            desc="시끄러운 음악";
+        }
+        else if(data<90){
+            desc="잔디깎기 소리";
+        }
+        else if(data<100){
+            desc="모터사이크 소리";
+        }
+        else if(data<110){
+            desc="콘서트";
+        }
+        else{
+            desc="고통을 주는 소음, 천둥";
+        }
+
+        document.getElementById("desc").innerHTML = desc;
         document.getElementById("show").innerHTML = data;
+
         Plotly.extendTraces('chart',{y:[[data]]}, [0]);
         ++cnt;
-    
         if(cnt>40){
             Plotly.relayout('chart',{
                 xaxis: {
@@ -86,5 +114,4 @@ function gotStream(stream) {
 
         Plotly.extendTraces('chart2',{y:[[data]]}, [0]);
     },0);
-
 }
