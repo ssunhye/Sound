@@ -19,17 +19,21 @@ function volumeAudioProcess( event ) {
     var bufLength = buf.length;
 	var sum = 0;
     var x;
-
+	var maxAmplitude=Math.abs(buf[0]);
 	if(bufLength!=0){
 		for (var i=0; i<bufLength; i++) {
-			x = buf[i];
-			sum += x * x;
+			x = Math.abs(buf[i]);
+			//sum += x * x;
+			if(maxAmplitude>x){
+				maxAmplitude=x;
+			}
 		}
 
 		var rms =  Math.sqrt(sum / bufLength/2);
 		rms=rms.toFixed(5);
-		if((rms/0.000002)!=0){
-			var decibel = 20*(Math.log10(rms/0.000002));		
+		if(x>0){
+			// var decibel = 20*(Math.log10(rms/0.000002));
+			var decibel = 20*(Math.log10(x/0.000002));		
 			this.volume = decibel;
 		}
 	}
