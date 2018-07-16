@@ -34,22 +34,23 @@ function volumeAudioProcess( event ) {
 	var sum = 0;
     var x;
 
-	// Do a root-mean-square on the samples: sum up the squares...
-    for (var i=0; i<bufLength; i++) {
-    	x = buf[i];
-    	if (Math.abs(x)>=this.clipLevel) {
-    		this.clipping = true;
-    		this.lastClip = window.performance.now();
-    	}
-    	sum += x * x;
-	}
+	if(bufLength!=0){
+		for (var i=0; i<bufLength; i++) {
+			x = buf[i];
+			if (Math.abs(x)>=this.clipLevel) {
+				this.clipping = true;
+				this.lastClip = window.performance.now();
+			}
+			sum += x * x;
+		}
 
-    // ... then take the square root of the sum.
-	var rms =  Math.sqrt(sum / bufLength/2);
-	
-	var decibel = 20*(Math.log10(rms/0.000002));
-	
-	//this.volume = Math.max(rms, this.volume*this.averaging);
-	this.volume = decibel;
+		var rms =  Math.sqrt(sum / bufLength/2);
+		
+		var decibel = 20*(Math.log10(rms/0.000002));
+		
+		//this.volume = Math.max(rms, this.volume*this.averaging);
+		this.volume = decibel;
+	}
+    
     
 }
