@@ -115,5 +115,5 @@ function gotStream(stream) {
         }
 
         Plotly.extendTraces('chart2',{y:[[data]]}, [0]);
-    },0);
+    },300);
 }
