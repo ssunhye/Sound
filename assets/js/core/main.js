@@ -46,8 +46,8 @@ function gotStream(stream) {
 
     meter = createAudioMeter(audioContext);
     mediaStreamSource.connect(meter);
-    data=meter.volume;
-    // data=meter.volume.toFixed(3);
+    // data=meter.volume;
+    data=meter.volume.toFixed(3);
 
     Plotly.plot('chart',[{
         y:[data],
@@ -61,8 +61,8 @@ function gotStream(stream) {
     }]);
 
     setInterval(function(){
-        //data=meter.volume.toFixed(3);
-        data=meter.volume;
+        data=meter.volume.toFixed(3);
+        // data=meter.volume;
 
         if(data<10){
             desc="숨쉬는 소리";
